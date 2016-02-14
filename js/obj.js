@@ -6,12 +6,15 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // returns new object with specified properties
-function objNew(imgPath, x, y, rot) {
-  var ret = {};
-  ret.x = x;
-  ret.y = y;
-  ret.rot = rot;
-  ret.div = document.createElement("div");
+function objNew(imgPath, x, y, velX, velY, rot) {
+  var ret = {
+    x: x,
+    y: y,
+    velX: velX,
+    velY: velY,
+    rot: rot,
+    div: document.createElement("div"),
+  };
   ret.div.style.position = "fixed";
   ret.div.style.display = "none";
   objSetImage(ret, imgPath);
