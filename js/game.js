@@ -25,10 +25,15 @@ function load() {
 }
 
 function update() {
+  var asteroidSpd = Math.min(0.1 + time / 600000, 0.2) * UpdateRate
+  var holeRate = time < 60000 ? 0.1
+               : time < 120000 ? 0.1 + (time - 60000) / 600000
+               : 0.2
+  //document.title = asteroidSpd + " " + holeRate
   while (Math.random() < 0.01 * UpdateRate) {
     var p = randInCircle(500, 1000)
-    var v = randInCircle(0, ShotSpd)
-    if (Math.random() < 0.1) {
+    var v = randInCircle(0, asteroidSpd)
+    if (Math.random() < holeRate) {
       var field = objNew("img/hole.png", player.x + p.x, player.y + p.y, player.velX + v.x, player.velY + v.y, 0)
       field.div.style.zIndex = -1
       fields[fields.length] = field
