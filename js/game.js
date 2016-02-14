@@ -27,7 +27,7 @@ function load() {
 function update() {
   while (Math.random() < 0.01 * UpdateRate) {
     var p = randInCircle(500, 1000)
-    var v = randInCircle(0, 0.1 * UpdateRate)
+    var v = randInCircle(0, ShotSpd)
     if (Math.random() < 0.1) {
       var field = objNew("img/hole.png", player.x + p.x, player.y + p.y, player.velX + v.x, player.velY + v.y, 0)
       field.div.style.zIndex = -1
@@ -50,6 +50,11 @@ function update() {
   for (var i = 0; i < shots.length; i++) {
     updatePos(shots[i], 0, shots[i].velRot)
     objDraw(shots[i])
+    if (objDistSq(shots[i], player) > Radius * Radius) {
+      objRemove(shots[i])
+      arrayRemove(shots, i)
+      i--
+    }
   }
   for (var i = 0; i < fields.length; i++) {
     updatePos(fields[i], 0, 0)
