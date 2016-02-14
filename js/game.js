@@ -89,6 +89,7 @@ function keyDown(event) {
   var key = findKey(event)
   //document.title = key
   keys[key] = 1
+  if (key == 190) document.body.style.backgroundColor = document.body.style.backgroundColor == "gray" ? "black" : "gray"
 }
 
 function keyUp(event) {
