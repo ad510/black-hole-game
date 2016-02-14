@@ -128,7 +128,7 @@ function updatePos(obj, fwd, rot) {
     if (mul == 0) {
       gameOver = true
       timeScale = 1000
-      document.body.style.backgroundColor = "red"
+      document.body.style.backgroundColor = "gray"
       document.getElementById("instruct").style.display = "none"
       document.getElementById("gameover").style.display = ""
       document.getElementById("score").firstChild.nodeValue = Math.floor(time / 1000)
