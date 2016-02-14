@@ -9,6 +9,7 @@ var ShotSpd = 0.1 * UpdateRate
 var keys = [].fill.call({length: 255}, 0)
 var viewX = 0, viewY = 0
 var time = 0
+var timer
 
 var player, timeScale = 1
 var shots = []
@@ -17,15 +18,26 @@ var fields = []
 function load() {
   player = objNew("img/obj0.png", 0, 0, 0, 0, Math.PI / 2)
   update()
-  setInterval(update, UpdateRate)
+  timer = setInterval(update, UpdateRate)
+  setTimeout(function() {
+    document.getElementById("instruct").style.display = "none"
+  }, 10000)
 }
 
 function update() {
   while (Math.random() < 0.01 * UpdateRate) {
     var p = randInCircle(500, 1000)
     var v = randInCircle(0, 0.1 * UpdateRate)
-    if (Math.random() < 0.1) fields[fields.length] = objNew("img/obj2.png", player.x + p.x, player.y + p.y, player.velX + v.x, player.velY + v.y, 0)
-    else shots[shots.length] = objNew("img/obj5.png", player.x + p.x, player.y + p.y, player.velX + v.x, player.velY + v.y, 0)
+    if (Math.random() < 0.1) {
+      var field = objNew("img/hole.png", player.x + p.x, player.y + p.y, player.velX + v.x, player.velY + v.y, 0)
+      field.div.style.zIndex = -1
+      fields[fields.length] = field
+    }
+    else {
+      var shot = objNew("img/asteroid.png", player.x + p.x, player.y + p.y, player.velX + v.x, player.velY + v.y, 0)
+      shot.velRot = Math.sign(Math.random() - 0.5) * PlayerRotSpd
+      shots[shots.length] = shot
+    }
   }
   for (var i = 0; i < fields.length; i++) {
     fields[i].prevX = fields[i].x
@@ -36,7 +48,7 @@ function update() {
   viewY = player.y - getWindowHeight() / 2
   objDraw(player)
   for (var i = 0; i < shots.length; i++) {
-    updatePos(shots[i], 0, PlayerRotSpd)
+    updatePos(shots[i], 0, shots[i].velRot)
     objDraw(shots[i])
   }
   for (var i = 0; i < fields.length; i++) {
@@ -58,7 +70,7 @@ function update() {
   }
   player.velX = 0
   player.velY = 0
-  time += UpdateRate / timeScale
+  time += UpdateRate
 }
 
 function keyDown(event) {
@@ -70,9 +82,9 @@ function keyDown(event) {
 function keyUp(event) {
   var key = findKey(event)
   keys[key] = 0
-  if (key == 32) // space
+  /*if (key == 32) // space
     shots[shots.length] = objNew("img/obj5.png", player.x, player.y,
-                                 player.velX + ShotSpd * Math.cos(player.rot), player.velY - ShotSpd * Math.sin(player.rot), player.rot)
+                                 player.velX + ShotSpd * Math.cos(player.rot), player.velY - ShotSpd * Math.sin(player.rot), player.rot)*/
 }
 
 function updatePos(obj, fwd, rot) {
@@ -91,8 +103,15 @@ function updatePos(obj, fwd, rot) {
     }
   }
   if (obj == player) {
-    if (mul == 0) document.title = "GAME OVER"
     timeScale = mul
+    if (mul == 0) {
+      timeScale = 1000
+      document.body.style.backgroundColor = "red"
+      document.getElementById("instruct").style.display = "none"
+      document.getElementById("gameover").style.display = ""
+      document.getElementById("score").firstChild.nodeValue = Math.floor(time / 1000)
+      clearInterval(timer)
+    }
   }
   if (field) {
     obj.x += field.velX + (obj.velX - field.velX) * mul / timeScale
