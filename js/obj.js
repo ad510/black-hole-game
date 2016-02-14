@@ -6,11 +6,11 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // returns new object with specified properties
-function objNew(imgPath, x, y) {
+function objNew(imgPath, x, y, rot) {
   var ret = {};
   ret.x = x;
   ret.y = y;
-  ret.rot = 0;
+  ret.rot = rot;
   ret.div = document.createElement("div");
   ret.div.style.position = "fixed";
   ret.div.style.display = "none";
@@ -37,6 +37,7 @@ function objDraw(obj) {
       && obj.y - imgProp[obj.imgPath].baseY + imgProp[obj.imgPath].height > viewY && obj.y - imgProp[obj.imgPath].baseY < viewY + getWindowHeight()) {
     obj.div.style.left = (obj.x - imgProp[obj.imgPath].baseX - viewX) + "px";
     obj.div.style.top = (obj.y - imgProp[obj.imgPath].baseY - viewY) + "px";
+    obj.div.style.transform = "rotate(" + (Math.PI / 2 - obj.rot) + "rad)";
     //obj.div.style.zIndex = Math.floor(obj.y);
     obj.div.style.display = "";
   }
