@@ -1,5 +1,6 @@
 "use strict"
 
+var Width = 800, Height = 600
 var UpdateRate = 33
 var PlayerAcc = 0.2
 var PlayerRotSpd = Math.PI / 1000 * UpdateRate
@@ -23,10 +24,16 @@ function update() {
   viewX = -getWindowWidth() / 2
   viewY = -getWindowHeight() / 2
   updatePos(player, (keys[38] - keys[40]) * PlayerAcc, (keys[37] - keys[39]) * PlayerRotSpd)
+  if (Math.abs(player.x) > Width / 2) player.x -= Width * Math.sign(player.x)
+  if (Math.abs(player.y) > Height / 2) player.y -= Height * Math.sign(player.y)
   objDraw(player)
   for (var i = 0; i < shots.length; i++) {
     updatePos(shots[i], 0, 0)
     objDraw(shots[i])
+    if (Math.abs(shots[i].x) > Width / 2 || Math.abs(shots[i].y) > Height / 2) {
+      objRemove(shots[i])
+      arrayRemove(shots, i)
+    }
   }
 }
 

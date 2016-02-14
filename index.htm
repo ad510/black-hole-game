@@ -7,7 +7,7 @@
 body {
   margin: 0px;
   padding: 0px;
-  background-color: black;
+  background-color: gray;
   color: white;
   font-family: "Georgia", "serif";
   font-size: 20px;
@@ -23,6 +23,7 @@ body {
     </script>
   </head>
   <body onload="load()" onKeyDown="keyDown(event)" onKeyUp="keyUp(event)">
-    <div id="draw" onMouseDown="mouseDown(event)"></div>
+    <div id="draw" onMouseDown="mouseDown(event)"
+         style="position: absolute; left: 50%; top: 50%; margin-left: -400px; margin-top: -300px; width: 800px; height: 600px; background-color: black"></div>
   </body>
 </html>
