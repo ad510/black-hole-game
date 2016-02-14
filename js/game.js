@@ -1,10 +1,10 @@
 "use strict"
 
 var Radius = 1000
-var UpdateRate = 33
-var PlayerAcc = 0.2
+var UpdateRate = 10
+var PlayerAcc = 0.01
 var PlayerRotSpd = Math.PI / 1000 * UpdateRate
-var ShotSpd = 0.2 * UpdateRate
+var ShotSpd = 0.1 * UpdateRate
 
 var keys = [].fill.call({length: 255}, 0)
 var viewX = 0, viewY = 0
@@ -21,10 +21,11 @@ function load() {
 }
 
 function update() {
-  while (Math.random() < 0.001 * UpdateRate) {
+  while (Math.random() < 0.01 * UpdateRate) {
     var p = randInCircle(500, 1000)
     var v = randInCircle(0, 0.1 * UpdateRate)
-    fields[fields.length] = objNew("img/obj2.png", player.x + p.x, player.y + p.y, player.velX + v.x, player.velY + v.y, 0)
+    if (Math.random() < 0.1) fields[fields.length] = objNew("img/obj2.png", player.x + p.x, player.y + p.y, player.velX + v.x, player.velY + v.y, 0)
+    else shots[shots.length] = objNew("img/obj5.png", player.x + p.x, player.y + p.y, player.velX + v.x, player.velY + v.y, 0)
   }
   for (var i = 0; i < fields.length; i++) {
     fields[i].prevX = fields[i].x
@@ -35,7 +36,7 @@ function update() {
   viewY = player.y - getWindowHeight() / 2
   objDraw(player)
   for (var i = 0; i < shots.length; i++) {
-    updatePos(shots[i], 0, 0)
+    updatePos(shots[i], 0, PlayerRotSpd)
     objDraw(shots[i])
   }
   for (var i = 0; i < fields.length; i++) {
@@ -47,6 +48,16 @@ function update() {
       i--
     }
   }
+  for (var i = 0; i < shots.length; i++) {
+    shots[i].velX -= player.velX
+    shots[i].velY -= player.velY
+  }
+  for (var i = 0; i < fields.length; i++) {
+    fields[i].velX -= player.velX
+    fields[i].velY -= player.velY
+  }
+  player.velX = 0
+  player.velY = 0
   time += UpdateRate / timeScale
 }
 
@@ -71,7 +82,7 @@ function updatePos(obj, fwd, rot) {
   for (var i = 0; i < fields.length; i++) {
     if (fields[i] != obj) {
       var d = objDist(obj, {x: fields[i].prevX, y: fields[i].prevY})
-      var m = Math.max(0, Math.min(1, d / 200 - 0.1))
+      var m = Math.max(0, Math.min(1, d / 500 - 0.2))
       if (m < 1 && (!field || d < dist)) {
         field = fields[i]
         dist = d
