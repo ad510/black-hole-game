@@ -1,7 +1,7 @@
 "use strict"
 
 var Radius = 1000
-var UpdateRate = 33
+var UpdateRate = 50
 var PlayerAcc = 0.2
 var PlayerRotSpd = Math.PI / 1000 * UpdateRate
 var ShotSpd = 0.2 * UpdateRate
@@ -10,14 +10,19 @@ var keys = [].fill.call({length: 255}, 0)
 var viewX = 0, viewY = 0
 var time = 0
 
-var player, timeScale = 1
+var player
 var shots = []
 var fields = []
 
 function load() {
   player = objNew("img/obj0.png", 0, 0, 0, 0, Math.PI / 2)
   update()
-  setInterval(update, UpdateRate)
+  setTimeout(update, UpdateRate)
+  setInterval(function() {
+    var fwd = (keys[38] - keys[40]) * PlayerAcc
+    player.velX += fwd * Math.cos(player.rot)
+    player.velY += -fwd * Math.sin(player.rot)
+  }, 33)
 }
 
 function update() {
@@ -30,7 +35,7 @@ function update() {
     fields[i].prevX = fields[i].x
     fields[i].prevY = fields[i].y
   }
-  updatePos(player, (keys[38] - keys[40]) * PlayerAcc, (keys[37] - keys[39]) * PlayerRotSpd)
+  var timeScale = updatePos(player, (keys[37] - keys[39]) * PlayerRotSpd)
   viewX = player.x - getWindowWidth() / 2
   viewY = player.y - getWindowHeight() / 2
   objDraw(player)
@@ -39,7 +44,7 @@ function update() {
     objDraw(shots[i])
   }
   for (var i = 0; i < fields.length; i++) {
-    updatePos(fields[i], 0, 0)
+    updatePos(fields[i], 0)
     objDraw(fields[i])
     if (objDistSq(fields[i], player) > Radius * Radius) {
       objRemove(fields[i])
@@ -47,7 +52,7 @@ function update() {
       i--
     }
   }
-  time += UpdateRate / timeScale
+  setTimeout(update, UpdateRate * timeScale)
 }
 
 function keyDown(event) {
@@ -64,10 +69,8 @@ function keyUp(event) {
                                  player.velX + ShotSpd * Math.cos(player.rot), player.velY - ShotSpd * Math.sin(player.rot), player.rot)
 }
 
-function updatePos(obj, fwd, rot) {
+function updatePos(obj, rot) {
   var field, dist, mul = 1
-  obj.velX += fwd * Math.cos(obj.rot)
-  obj.velY += -fwd * Math.sin(obj.rot)
   for (var i = 0; i < fields.length; i++) {
     if (fields[i] != obj) {
       var d = objDist(obj, {x: fields[i].prevX, y: fields[i].prevY})
@@ -81,16 +84,15 @@ function updatePos(obj, fwd, rot) {
   }
   if (obj == player) {
     if (mul == 0) document.title = "GAME OVER"
-    timeScale = mul
   }
   if (field) {
-    obj.x += field.velX + (obj.velX - field.velX) * mul / timeScale
-    obj.y += field.velY + (obj.velY - field.velY) * mul / timeScale
-    obj.rot += rot * mul / timeScale
+    obj.x += field.velX + (obj.velX - field.velX) * mul
+    obj.y += field.velY + (obj.velY - field.velY) * mul
+    obj.rot += rot * mul
   } else {
-    obj.x += obj.velX / timeScale
-    obj.y += obj.velY / timeScale
-    obj.rot += rot / timeScale
+    obj.x += obj.velX
+    obj.y += obj.velY
+    obj.rot += rot
   }
   return mul
 }
