@@ -14,8 +14,13 @@ var timer
 var player, timeScale = 1
 var shots = []
 var fields = []
+var gameOver = false
+
+var rocketSnd, stopSnd
 
 function load() {
+  rocketSnd = sndNew("snd/rocket", 1)
+  stopSnd = sndNew("snd/stop", 1)
   player = objNew("img/obj0.png", 0, 0, 0, 0, Math.PI / 2)
   update()
   timer = setInterval(update, UpdateRate)
@@ -89,12 +94,18 @@ function keyDown(event) {
   var key = findKey(event)
   //document.title = key
   keys[key] = 1
+  if (!gameOver && (keys[38] || keys[40])) sndPlay(rocketSnd)
   if (key == 190) document.body.style.backgroundColor = document.body.style.backgroundColor == "gray" ? "black" : "gray"
 }
 
 function keyUp(event) {
   var key = findKey(event)
   keys[key] = 0
+  if (!gameOver && (key == 38 || key == 40) && !(keys[38] || keys[40])) {
+    sndPlay(stopSnd)
+    rocketSnd.snds[0].pause()
+    rocketSnd.snds[0].currentTime = 0
+  }
 }
 
 function updatePos(obj, fwd, rot) {
@@ -115,12 +126,14 @@ function updatePos(obj, fwd, rot) {
   if (obj == player) {
     timeScale = mul
     if (mul == 0) {
+      gameOver = true
       timeScale = 1000
       document.body.style.backgroundColor = "red"
       document.getElementById("instruct").style.display = "none"
       document.getElementById("gameover").style.display = ""
       document.getElementById("score").firstChild.nodeValue = Math.floor(time / 1000)
       clearInterval(timer)
+      rocketSnd.snds[0].pause()
     }
   }
   if (field) {
