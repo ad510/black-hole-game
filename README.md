@@ -1,7 +1,7 @@
 Black Hole game
 ===============
 
-A game about avoiding black holes. Black holes are simulated using time dialation, so time slows down if you get close to them (though the way this is simulated isn't physically accurate). Made in less than 24 hours for CodeDay LA.
+A game about avoiding black holes. Black holes are simulated using time dilation, so time slows down if you get close to them (though the way this is simulated isn't physically accurate). Made in less than 24 hours for CodeDay LA.
 
 Open index.htm to play. Press `.` to toggle debugging mode.
 
