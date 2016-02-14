@@ -4,7 +4,7 @@ var Radius = 1000
 var UpdateRate = 10
 var PlayerAcc = 0.01
 var PlayerRotSpd = Math.PI / 1000 * UpdateRate
-var ShotSpd = 0.1 * UpdateRate
+var PropelSpd = 1 * UpdateRate
 
 var keys = [].fill.call({length: 255}, 0)
 var viewX = 0, viewY = 0
@@ -44,6 +44,8 @@ function update() {
       shots[shots.length] = shot
     }
   }
+  if (keys[38] && Math.random() < 0.02 * UpdateRate) propel(-1)
+  if (keys[40] && Math.random() < 0.02 * UpdateRate) propel(1)
   for (var i = 0; i < fields.length; i++) {
     fields[i].prevX = fields[i].x
     fields[i].prevY = fields[i].y
@@ -92,12 +94,6 @@ function keyDown(event) {
 function keyUp(event) {
   var key = findKey(event)
   keys[key] = 0
-  /*if (key == 32) { // space
-    var shot = objNew("img/asteroid.png", player.x, player.y,
-                      player.velX + ShotSpd * Math.cos(player.rot), player.velY - ShotSpd * Math.sin(player.rot), player.rot)
-    shot.velRot = Math.sign(Math.random() - 0.5) * PlayerRotSpd
-    shots[shots.length] = shot
-  }*/
 }
 
 function updatePos(obj, fwd, rot) {
@@ -136,6 +132,14 @@ function updatePos(obj, fwd, rot) {
     obj.rot += rot / timeScale
   }
   return mul
+}
+
+function propel(dir) {
+  var shot = objNew("img/propel.png", player.x, player.y,
+                    player.velX + PropelSpd * Math.cos(player.rot) * dir + (Math.random() - 0.5) * PropelSpd / 3,
+                    player.velY - PropelSpd * Math.sin(player.rot) * dir + (Math.random() - 0.5) * PropelSpd / 3, 0)
+  shot.velRot = 0
+  shots[shots.length] = shot
 }
 
 function randInCircle(min, max) {

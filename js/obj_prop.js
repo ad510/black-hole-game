@@ -19,4 +19,10 @@ var imgProp = {
     baseX: 20,
     baseY: 20,
   },
+  "img/propel.png": {
+    width: 20,
+    height: 20,
+    baseX: 10,
+    baseY: 10,
+  },
 }
