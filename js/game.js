@@ -82,9 +82,12 @@ function keyDown(event) {
 function keyUp(event) {
   var key = findKey(event)
   keys[key] = 0
-  /*if (key == 32) // space
-    shots[shots.length] = objNew("img/obj5.png", player.x, player.y,
-                                 player.velX + ShotSpd * Math.cos(player.rot), player.velY - ShotSpd * Math.sin(player.rot), player.rot)*/
+  /*if (key == 32) { // space
+    var shot = objNew("img/asteroid.png", player.x, player.y,
+                      player.velX + ShotSpd * Math.cos(player.rot), player.velY - ShotSpd * Math.sin(player.rot), player.rot)
+    shot.velRot = Math.sign(Math.random() - 0.5) * PlayerRotSpd
+    shots[shots.length] = shot
+  }*/
 }
 
 function updatePos(obj, fwd, rot) {
