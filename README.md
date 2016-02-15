@@ -19,7 +19,7 @@ In case you're wondering, the game over screen pauses the game at about the last
 
 More about black holes
 ----------------------
-While the "black hole"-like objects in this game follow very different equations than [real black holes](https://en.wikipedia.org/wiki/Black_hole), they have some things in common. Real black holes do in fact [slow down your perception of time](https://en.wikipedia.org/wiki/Gravitational_time_dilation) when you get close to them. This has been proposed as a way to quickly time travel to the future, like in the movie [Interstellar](https://en.wikipedia.org/wiki/Interstellar_%28film%29).
+While the "black hole"-like objects in this game follow very different equations than [real black holes](https://en.wikipedia.org/wiki/Black_hole), they have some things in common. Real black holes do in fact [slow down your perception of time](http://www.feynmanlectures.caltech.edu/II_42.html#Ch42-S6) when you get close to them. This has been proposed as a way to quickly time travel to the future, like in the movie [Interstellar](https://en.wikipedia.org/wiki/Interstellar_%28film%29).
 
 You can learn about physically accurate black hole rendering [here](https://imgur.com/a/kocqC), [here](http://spiro.fisica.unipd.it/~antonell/schwarzschild/), and [here](https://rantonels.github.io/starless/).
 
