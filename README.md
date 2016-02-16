@@ -1,13 +1,13 @@
 Time Dilation game
 ==================
 
-A game inspired by black holes and [World 6](https://youtu.be/chd4ijoaxVk?t=18s) of [Braid](http://braid-game.com). It simulates "black hole"-like objects using time dilation, so time slows down if you get close to them (though they behave very differently from real black holes). Made in less than 24 hours for CodeDay LA.
+A game inspired by black holes and [World 6](https://youtu.be/chd4ijoaxVk?t=18s) of [Braid](http://braid-game.com). It simulates "black hole"-like objects using time dilation, so time slows down if you get close to them (though they behave very differently from real black holes). Made at [CodeDay LA](https://codeday.org/la).
 
 Open index.htm or [go here](https://ad510.github.io/time-dilation-game) to play. Press `.` in-game to toggle debugging mode.
 
-How it works
-------------
-I made this game because I liked the idea behind [Braid World 6](https://youtu.be/chd4ijoaxVk?t=18s), but there were some details about how this was implemented that bugged me.
+Death by time manipulation
+--------------------------
+I made this game because I liked the idea behind [Braid World 6](https://youtu.be/chd4ijoaxVk?t=18s), but it bugged me that Braid didn't take the concept further.
 
 First, when you go near the ring, the internal clock in the player's brain should slow down too. This means that while in Braid you see the player move slowly when he's near the ring, it would be more accurate if you instead see the player move at normal speed when he's near the ring, but see everything else around him move faster.
 
@@ -17,11 +17,9 @@ But now consider what someone walking across a super-ring would see if their bra
 
 In case you're wondering, the game over screen pauses the game at about the last possible moment before you would "die" of time manipulation. If I let it run just a single frame longer, the game goes haywire trying to literally simulate an infinite time interval in a single frame, setting every object's position to NaN and making them disappear from the screen.
 
-More about black holes
-----------------------
-While the "black hole"-like objects in this game follow very different equations than [real black holes](https://en.wikipedia.org/wiki/Black_hole), they have some things in common. Real black holes do in fact [slow down your perception of time](http://www.feynmanlectures.caltech.edu/II_42.html#Ch42-S6) when you get close to them. This has been proposed as a way to quickly time travel to the future, like in the movie [Interstellar](https://en.wikipedia.org/wiki/Interstellar_%28film%29).
-
-You can learn about physically accurate black hole rendering [here](https://imgur.com/a/kocqC), [here](http://spiro.fisica.unipd.it/~antonell/schwarzschild/), and [here](https://rantonels.github.io/starless/).
+About black holes
+-----------------
+While [real black holes](http://spiro.fisica.unipd.it/~antonell/schwarzschild/live) follow very different equations from the black hole-inspired objects in this game, black holes do in fact [slow down your perception of time](http://www.feynmanlectures.caltech.edu/II_42.html#Ch42-S6) when you get close to them. This has been proposed as a way to quickly time travel to the future, like in the movie [Interstellar](https://en.wikipedia.org/wiki/Interstellar_%28film%29). General relativity even [predicts](http://math.ucr.edu/home/baez/physics/Relativity/BlackHoles/fall_in.html) (under "Will you see the universe end?") that if you fall into a special kind of black hole called a wormhole, you would see the entire lifetime of the universe play out in the short amount of time it takes to reach the wormhole entrance, like when you "die" in this game. That said, we don't know whether wormholes actually exist.
 
 Copying
 -------
