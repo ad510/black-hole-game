@@ -7,6 +7,8 @@ function objNew(imgPath, x, y, velX, velY, rot) {
     y: y,
     velX: velX,
     velY: velY,
+    dilatedVelX: velX,
+    dilatedVelY: velY,
     rot: rot,
     div: document.createElement("div"),
   };

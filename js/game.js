@@ -39,12 +39,12 @@ function update() {
     var p = randInCircle(500, 1000)
     var v = randInCircle(0, asteroidSpd)
     if (Math.random() < holeRate) {
-      var field = objNew("img/hole.png", player.x + p.x, player.y + p.y, player.velX + v.x, player.velY + v.y, 0)
+      var field = objNew("img/hole.png", player.x + p.x, player.y + p.y, player.dilatedVelX + v.x, player.dilatedVelY + v.y, 0)
       field.div.style.zIndex = -1
       fields[fields.length] = field
     }
     else {
-      var shot = objNew("img/asteroid.png", player.x + p.x, player.y + p.y, player.velX + v.x, player.velY + v.y, 0)
+      var shot = objNew("img/asteroid.png", player.x + p.x, player.y + p.y, player.dilatedVelX + v.x, player.dilatedVelY + v.y, 0)
       shot.velRot = Math.sign(Math.random() - 0.5) * PlayerRotSpd
       shots[shots.length] = shot
     }
@@ -77,16 +77,6 @@ function update() {
       i--
     }
   }
-  for (var i = 0; i < shots.length; i++) {
-    shots[i].velX -= player.velX
-    shots[i].velY -= player.velY
-  }
-  for (var i = 0; i < fields.length; i++) {
-    fields[i].velX -= player.velX
-    fields[i].velY -= player.velY
-  }
-  player.velX = 0
-  player.velY = 0
   time += UpdateRate
 }
 
@@ -137,15 +127,15 @@ function updatePos(obj, fwd, rot) {
     }
   }
   if (field) {
-    obj.x += field.velX + (obj.velX - field.velX) * mul / timeScale
-    obj.y += field.velY + (obj.velY - field.velY) * mul / timeScale
-    obj.rot += rot * mul / timeScale
+    obj.dilatedVelX = field.dilatedVelX + (obj.velX - field.dilatedVelX) * mul
+    obj.dilatedVelY = field.dilatedVelY + (obj.velY - field.dilatedVelY) * mul
   } else {
-    obj.x += obj.velX / timeScale
-    obj.y += obj.velY / timeScale
-    obj.rot += rot / timeScale
+    obj.dilatedVelX = obj.velX
+    obj.dilatedVelY = obj.velY
   }
-  return mul
+  obj.x += obj.dilatedVelX / timeScale
+  obj.y += obj.dilatedVelY / timeScale
+  obj.rot += rot * mul / timeScale
 }
 
 function propel(dir) {
