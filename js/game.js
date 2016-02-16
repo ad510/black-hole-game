@@ -115,8 +115,8 @@ function updatePos(obj, fwd, rot) {
   for (var i = 0; i < fields.length; i++) {
     if (fields[i] != obj) {
       var d = objDist(obj, {x: fields[i].prevX, y: fields[i].prevY})
-      var m = Math.max(0, Math.min(1, d / 500 - 0.2))
-      if (m < 1 && (!field || d < dist)) {
+      var m = 500 / d
+      if (m > 1 && (!field || d < dist)) {
         field = fields[i]
         dist = d
         mul = m
