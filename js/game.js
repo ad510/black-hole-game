@@ -1,10 +1,13 @@
 "use strict"
 
-var Radius = 1000
-var UpdateRate = 10
-var PlayerAcc = 0.01
+var Radius = 2000
+var UpdateRate = 33
+var PlayerAcc = 0.2
 var PlayerRotSpd = Math.PI / 1000 * UpdateRate
 var PropelSpd = 1 * UpdateRate
+var FieldSpd = 0.15 * UpdateRate
+var NFields = 20
+var FieldRatio = 0.1
 
 var keys = [].fill.call({length: 255}, 0)
 var viewX = 0, viewY = 0
@@ -22,6 +25,18 @@ function load() {
   rocketSnd = sndNew("snd/rocket", 1)
   stopSnd = sndNew("snd/stop", 1)
   player = objNew("img/obj0.png", 0, 0, 0, 0, Math.PI / 2)
+  for (var i = 0; i < (NFields / FieldRatio - NFields) / 4; i++) {
+    var p = randInCircle(0, 1000)
+    var v = randInCircle(0, FieldSpd)
+    shots[i] = objNew("img/asteroid.png", p.x, p.y, v.x, v.y, Math.random() * Math.PI * 2)
+    shots[i].velRot = Math.sign(Math.random() - 0.5) * PlayerRotSpd
+  }
+  for (var i = 0; i < NFields / 4; i++) {
+    var p = randInCircle(500, 1000)
+    var v = randInCircle(0, FieldSpd)
+    fields[i] = objNew("img/hole.png", p.x, p.y, v.x, v.y, 0)
+    fields[i].div.style.zIndex = -1
+  }
   update()
   timer = setInterval(update, UpdateRate)
   setTimeout(function() {
@@ -30,21 +45,16 @@ function load() {
 }
 
 function update() {
-  var asteroidSpd = Math.min(0.1 + time / 600000, 0.2) * UpdateRate
-  var holeRate = time < 60000 ? 0.1
-               : time < 120000 ? 0.1 + (time - 60000) / 600000
-               : 0.2
-  //document.title = asteroidSpd + " " + holeRate
-  while (Math.random() < 0.01 * UpdateRate) {
-    var p = randInCircle(500, 1000)
-    var v = randInCircle(0, asteroidSpd)
-    if (Math.random() < holeRate) {
+  while (fields.length < NFields + NFields * time / 120000) {
+    var p = randInCircle(1000, 2000)
+    var v = randInCircle(0, FieldSpd + FieldSpd * time / 120000)
+    if (Math.random() < FieldRatio) {
       var field = objNew("img/hole.png", player.x + p.x, player.y + p.y, player.dilatedVelX + v.x, player.dilatedVelY + v.y, 0)
       field.div.style.zIndex = -1
       fields[fields.length] = field
     }
     else {
-      var shot = objNew("img/asteroid.png", player.x + p.x, player.y + p.y, player.dilatedVelX + v.x, player.dilatedVelY + v.y, 0)
+      var shot = objNew("img/asteroid.png", player.x + p.x, player.y + p.y, player.dilatedVelX + v.x, player.dilatedVelY + v.y, Math.random() * Math.PI * 2)
       shot.velRot = Math.sign(Math.random() - 0.5) * PlayerRotSpd
       shots[shots.length] = shot
     }
@@ -114,10 +124,9 @@ function updatePos(obj, fwd, rot) {
     }
   }
   if (obj == player) {
-    timeScale = mul
-    if (mul == 0) {
+    if (mul >= 1 / UpdateRate) timeScale = mul
+    else {
       gameOver = true
-      timeScale = 1000
       document.body.style.backgroundColor = "gray"
       document.getElementById("instruct").style.display = "none"
       document.getElementById("gameover").style.display = ""
