@@ -124,7 +124,7 @@ function updatePos(obj, fwd, rot) {
     }
   }
   if (obj == player) {
-    if (mul >= 1 / UpdateRate) timeScale = mul
+    if (mul >= UpdateRate / 1500) timeScale = mul
     else {
       gameOver = true
       document.body.style.backgroundColor = "gray"
