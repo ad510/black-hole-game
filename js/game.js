@@ -10,6 +10,7 @@ var NFields = 20
 var FieldRatio = 0.1
 
 var keys = [].fill.call({length: 255}, 0)
+var mouseX = 0, mouseY = 0, isMouseDown = false
 var viewX = 0, viewY = 0
 var time = 0
 var timer
@@ -59,6 +60,7 @@ function update() {
       shots[shots.length] = shot
     }
   }
+  if (isMouseDown) player.rot = Math.atan2(-mouseY + getWindowHeight() / 2, mouseX - getWindowWidth() / 2)
   if (keys[38] && Math.random() < 0.02 * UpdateRate) propel(-1)
   if (keys[40] && Math.random() < 0.02 * UpdateRate) propel(1)
   for (var i = 0; i < fields.length; i++) {
@@ -106,6 +108,16 @@ function keyUp(event) {
     rocketSnd.snds[0].pause()
     rocketSnd.snds[0].currentTime = 0
   }
+}
+
+function mouseDown() {
+  keyDown({keyCode: 38})
+  isMouseDown = true
+}
+
+function mouseUp() {
+  keyUp({keyCode: 38})
+  isMouseDown = false
 }
 
 function updatePos(obj, fwd, rot) {
