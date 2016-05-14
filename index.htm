@@ -31,7 +31,7 @@ div.texty {
   </head>
   <body onload="load()" onkeydown="keyDown(event)" onkeyup="keyUp(event)"
         onmousedown="mouseDown()" onmouseup="mouseUp()" onmousemove="getMousePos(event)"
-        ontouchstart="mouseDown()" ontouchend="mouseUp()" ontouchmove="getMousePos(event.changedTouches[0])">
+        ontouchstart="mouseDown()" ontouchend="mouseUp()" ontouchmove="getMousePos(event.changedTouches[0]); event.preventDefault()">
     <div id="draw" style="position: absolute; width: 100%; height: 100%"></div>
     <div id="instruct" class="texty">Use arrow keys to move. Avoid the "black holes!"</div>
     <div id="gameover" class="texty" style="display: none">
