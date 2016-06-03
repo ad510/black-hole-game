@@ -1,12 +1,12 @@
-Time Dilation game
-==================
+Death by Time Manipulation
+==========================
 
 A game inspired by black holes and [World 6](https://youtu.be/chd4ijoaxVk?t=18s) of [Braid](http://braid-game.com). It simulates "black hole"-like objects using time dilation, so time slows down if you get close to them (though they behave very differently from real black holes). Made at [CodeDay LA](https://codeday.org/la).
 
-Open index.htm or [go here](https://ad510.github.io/time-dilation-game) to play. Press `.` in-game to toggle debugging mode.
+Open index.htm or [go here](https://ad510.github.io/time-dilation-game) to play.
 
-Death by time manipulation
---------------------------
+How do you die by time manipulation?
+------------------------------------
 I made this game because I liked the idea behind [Braid World 6](https://youtu.be/chd4ijoaxVk?t=18s), but it bugged me that Braid didn't take the concept further.
 
 First, when you go near the ring, the internal clock in the player's brain should slow down too. This means that while in Braid you see the player move slowly when he's near the ring, it would be more accurate if you instead see the player move at normal speed when he's near the ring, but see everything else around him move faster.

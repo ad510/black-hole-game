@@ -22,7 +22,10 @@ var gameOver = false
 
 var rocketSnd, stopSnd
 
-function load() {
+function load(color) {
+  document.getElementById("intro").style.display = "none"
+  document.getElementById("instruct").style.display = ""
+  document.body.style.backgroundColor = color
   rocketSnd = sndNew("snd/rocket", 1)
   stopSnd = sndNew("snd/stop", 1)
   player = objNew("img/obj0.png", 0, 0, 0, 0, Math.PI / 2)
@@ -96,14 +99,13 @@ function keyDown(event) {
   var key = findKey(event)
   //document.title = key
   keys[key] = 1
-  if (!gameOver && (keys[38] || keys[40])) sndPlay(rocketSnd)
-  if (key == 190) document.body.style.backgroundColor = document.body.style.backgroundColor == "gray" ? "black" : "gray"
+  if (player && !gameOver && (keys[38] || keys[40])) sndPlay(rocketSnd)
 }
 
 function keyUp(event) {
   var key = findKey(event)
   keys[key] = 0
-  if (!gameOver && (key == 38 || key == 40) && !(keys[38] || keys[40])) {
+  if (player && !gameOver && (key == 38 || key == 40) && !(keys[38] || keys[40])) {
     sndPlay(stopSnd)
     rocketSnd.snds[0].pause()
     rocketSnd.snds[0].currentTime = 0
