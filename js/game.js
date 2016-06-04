@@ -33,7 +33,7 @@ function load(color) {
     var p = randInCircle(0, 1000)
     var v = randInCircle(0, FieldSpd)
     shots[i] = objNew("img/asteroid.png", p.x, p.y, v.x, v.y, Math.random() * Math.PI * 2)
-    shots[i].velRot = Math.sign(Math.random() - 0.5) * PlayerRotSpd
+    shots[i].velRot = (Math.random() - 0.5) * PlayerRotSpd * 4
   }
   for (var i = 0; i < NFields / 4; i++) {
     var p = randInCircle(500, 1000)
@@ -59,7 +59,7 @@ function update() {
     }
     else {
       var shot = objNew("img/asteroid.png", player.x + p.x, player.y + p.y, player.dilatedVelX + v.x, player.dilatedVelY + v.y, Math.random() * Math.PI * 2)
-      shot.velRot = Math.sign(Math.random() - 0.5) * PlayerRotSpd
+      shot.velRot = (Math.random() - 0.5) * PlayerRotSpd * 4
       shots[shots.length] = shot
     }
   }
