@@ -12,6 +12,10 @@ body {
   font-family: "Arial", "serif";
   font-size: 50px;
 }
+input {
+  -webkit-appearance: button;
+  font-size: 25px;
+}
 div.texty {
   position: absolute;
   width: 100%;
@@ -37,11 +41,11 @@ div.texty {
       Death by Time Manipulation<br/><br/>
       <div style="font-size: 25px">
         <form action="https://github.com/ad510/time-dilation-game/blob/gh-pages/README.md#how-do-you-die-by-time-manipulation" target="_blank">
-          <input type="submit" value="How do you die by time manipulation?" style="font-size: 25px"/>
+          <input type="submit" value="How do you die by time manipulation?"/>
         </form><br/><br/>
-        <input type="button" value="Easy" onclick="load('gray')" style="font-size: 25px"/><br/>
+        <input type="button" value="Easy" onclick="load('gray')"/><br/>
         Black hole-inspired objects are visible. Asteroids have no effect on gameplay.<br/><br/>
-        <input type="button" value="Hard" onclick="load('black')" style="font-size: 25px"/><br/>
+        <input type="button" value="Hard" onclick="load('black')"/><br/>
         Black hole-inspired objects are invisible on a black background, so you must find them by studying their time manipulation effects on asteroids and rocket exhaust.
       </div>
     </div>
@@ -49,7 +53,7 @@ div.texty {
     <div id="gameover" class="texty" style="display: none">
       GAME OVER<br/>
       You survived for <span id="score">&nbsp;</span> seconds<br/>
-      <input type="button" value="Play Again" onclick="location.reload()" style="font-size: 25px"/>
+      <input type="button" value="Play Again" onclick="location.reload()"/>
     </div>
   </body>
 </html>
