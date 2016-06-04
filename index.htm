@@ -38,18 +38,16 @@ div.texty {
         ontouchstart="getMousePos(event.changedTouches[0]); mouseDown()" ontouchend="mouseUp()" ontouchmove="getMousePos(event.changedTouches[0]); if (player) event.preventDefault()">
     <div id="draw" style="position: absolute; width: 100%; height: 100%"></div>
     <div id="intro" class="texty">
-      Death by Time Manipulation<br/><br/>
-      <div style="font-size: 25px">
-        <form action="https://github.com/ad510/time-dilation-game/blob/gh-pages/README.md#how-do-you-die-by-time-manipulation" target="_blank">
-          <input type="submit" value="How do you die by time manipulation?"/>
-        </form><br/><br/>
+      Death by Time Manipulation
+      <div style="font-size: 25px"><br/>
+        By the time your ship touches a time killer, you will have seen the entire lifetime of the universe pass. At which point it's <a href="https://github.com/ad510/time-dilation-game/blob/gh-pages/README.md#how-it-works" target="_blank" style="color: white">game over</a>.<br/><br/>
         <input type="button" value="Easy" onclick="load('gray')"/><br/>
-        Black hole-inspired objects are visible. Asteroids have no effect on gameplay.<br/><br/>
+        Time killers are visible. Asteroids have no effect on gameplay.<br/><br/>
         <input type="button" value="Hard" onclick="load('black')"/><br/>
-        Black hole-inspired objects are invisible on a black background, so you must find them by studying their time manipulation effects on asteroids and rocket exhaust.
+        Time killers are invisible on a black background, so you must find them by studying their time manipulation effects on asteroids and rocket exhaust.
       </div>
     </div>
-    <div id="instruct" class="texty" style="display: none">Use arrow keys to move. Avoid the "black holes!"</div>
+    <div id="instruct" class="texty" style="display: none">Use arrow keys to move. Avoid the time killers!</div>
     <div id="gameover" class="texty" style="display: none">
       GAME OVER<br/>
       You survived for <span id="score">&nbsp;</span> seconds<br/>
