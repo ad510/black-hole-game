@@ -146,13 +146,17 @@ function updatePos(obj, fwd, rot) {
     else {
       timeScale = UpdateRate / 1500
       gameOver = true
-      document.body.style.backgroundColor = "gray"
-      document.getElementById("instruct").style.display = "none"
-      document.getElementById("gameover").style.display = ""
       document.getElementById("score").firstChild.nodeValue = Math.floor(time / 1000)
       clearInterval(timer)
-      rocketSnd.snds[0].pause()
-      setInterval(updateObjs, 10)
+      timer = setInterval(function() {
+        for (var i = 0; i < 5; i++) updateObjs()
+      }, 10)
+      setTimeout(function() {
+        document.body.style.backgroundColor = "gray"
+        document.getElementById("instruct").style.display = "none"
+        document.getElementById("gameover").style.display = ""
+        rocketSnd.snds[0].pause()
+      }, 400)
     }
   }
   if (field) {
