@@ -145,7 +145,11 @@ function updatePos(obj, fwd, rot) {
     if (mul >= UpdateRate / 1500) timeScale = mul
     else {
       timeScale = UpdateRate / 1500
-      gameOver = true
+      gameOver = {
+        field: field,
+        x: obj.x - field.prevX,
+        y: obj.y - field.prevY,
+      }
       document.getElementById("score").firstChild.nodeValue = Math.floor(time / 1000)
       clearInterval(timer)
       timer = setInterval(function() {
@@ -158,6 +162,11 @@ function updatePos(obj, fwd, rot) {
         rocketSnd.snds[0].pause()
       }, 400)
     }
+  }
+  if (obj == player && gameOver) {
+    obj.x = gameOver.field.x + gameOver.field.dilatedVelX / timeScale + gameOver.x
+    obj.y = gameOver.field.y + gameOver.field.dilatedVelY / timeScale + gameOver.y
+    return
   }
   if (field) {
     obj.dilatedVelX = field.dilatedVelX + (obj.velX - field.dilatedVelX) * mul
