@@ -66,6 +66,10 @@ function update() {
   if (isMouseDown) player.rot = Math.atan2(-mouseY + getWindowHeight() / 2, mouseX - getWindowWidth() / 2)
   if (keys[38] && Math.random() < 0.02 * UpdateRate) propel(-1)
   if (keys[40] && Math.random() < 0.02 * UpdateRate) propel(1)
+  updateObjs()
+}
+
+function updateObjs() {
   for (var i = 0; i < fields.length; i++) {
     fields[i].prevX = fields[i].x
     fields[i].prevY = fields[i].y
@@ -137,9 +141,10 @@ function updatePos(obj, fwd, rot) {
       }
     }
   }
-  if (obj == player) {
+  if (obj == player && !gameOver) {
     if (mul >= UpdateRate / 1500) timeScale = mul
     else {
+      timeScale = UpdateRate / 1500
       gameOver = true
       document.body.style.backgroundColor = "gray"
       document.getElementById("instruct").style.display = "none"
@@ -147,6 +152,7 @@ function updatePos(obj, fwd, rot) {
       document.getElementById("score").firstChild.nodeValue = Math.floor(time / 1000)
       clearInterval(timer)
       rocketSnd.snds[0].pause()
+      setInterval(updateObjs, 10)
     }
   }
   if (field) {
