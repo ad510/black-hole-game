@@ -93,7 +93,7 @@ function updateObjs() {
     shots[i].draw()
     if (objDistSq(shots[i], player) > Radius * Radius) {
       shots[i].remove()
-      arrayRemove(shots, i)
+      shots.splice(i, 1)
       i--
     }
   }
@@ -101,7 +101,7 @@ function updateObjs() {
     fields[i].draw()
     if (objDistSq(fields[i], player) > Radius * Radius) {
       fields[i].remove()
-      arrayRemove(fields, i)
+      fields.splice(i, 1)
       i--
     }
   }

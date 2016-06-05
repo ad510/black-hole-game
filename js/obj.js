@@ -76,21 +76,6 @@ Sound.prototype.play = function() {
   }
 }
 
-// move array1[index1] from array1 to array2
-function arrayMove(array1, index1, array2) {
-  array2[array2.length] = array1[index1];
-  arrayRemove(array1, index1);
-}
-
-// remove array[index] and move later elements forward by 1
-// decrement index and continue (in loop) after calling this
-function arrayRemove(array, index) {
-  for (var i = Number(index); i < array.length - 1; i++) {
-    array[i] = array[i + 1];
-  }
-  array.splice(array.length - 1, 1);
-}
-
 function getDrawDiv() {
   return document.getElementById("draw");
 }
