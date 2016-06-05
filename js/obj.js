@@ -1,5 +1,7 @@
 "use strict";
 
+var viewX = 0, viewY = 0;
+
 // game object class
 function Obj(imgPath, x, y, velX, velY, rot) {
   this.x = x;
