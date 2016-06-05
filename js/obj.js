@@ -58,7 +58,7 @@ function objDist(obj1, obj2) {
 
 // returns square of distance between 2 objects
 function objDistSq(obj1, obj2) {
-  return Math.pow(obj2.x - obj1.x, 2) + Math.pow(obj2.y - obj1.y, 2);
+  return (obj2.x - obj1.x) * (obj2.x - obj1.x) + (obj2.y - obj1.y) * (obj2.y - obj1.y);
 }
 
 // returns object to play either specified ogg or mp3 sound (depending on browser support)
