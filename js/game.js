@@ -78,21 +78,21 @@ function updateObjs() {
   viewX = player.x - getWindowWidth() / 2
   viewY = player.y - getWindowHeight() / 2
   objDraw(player)
-  for (var i = 0; i < shots.length; i++) {
-    updatePos(shots[i], 0, shots[i].velRot)
-    objDraw(shots[i])
-    if (objDistSq(shots[i], player) > Radius * Radius) {
-      objRemove(shots[i])
-      arrayRemove(shots, i)
-      i--
-    }
-  }
   for (var i = 0; i < fields.length; i++) {
     updatePos(fields[i], 0, 0)
     objDraw(fields[i])
     if (objDistSq(fields[i], player) > Radius * Radius) {
       objRemove(fields[i])
       arrayRemove(fields, i)
+      i--
+    }
+  }
+  for (var i = 0; i < shots.length; i++) {
+    updatePos(shots[i], 0, shots[i].velRot)
+    objDraw(shots[i])
+    if (objDistSq(shots[i], player) > Radius * Radius) {
+      objRemove(shots[i])
+      arrayRemove(shots, i)
       i--
     }
   }
@@ -153,14 +153,16 @@ function updatePos(obj, fwd, rot) {
       document.getElementById("score").firstChild.nodeValue = Math.floor(time / 1000)
       clearInterval(timer)
       timer = setInterval(function() {
-        for (var i = 0; i < 5; i++) updateObjs()
+        updateObjs()
+        timeScale *= 0.75
+        if (timeScale < 0.0005) {
+          document.body.style.backgroundColor = "gray"
+          document.getElementById("instruct").style.display = "none"
+          document.getElementById("gameover").style.display = ""
+          clearInterval(timer)
+          rocketSnd.snds[0].pause()
+        }
       }, 10)
-      setTimeout(function() {
-        document.body.style.backgroundColor = "gray"
-        document.getElementById("instruct").style.display = "none"
-        document.getElementById("gameover").style.display = ""
-        rocketSnd.snds[0].pause()
-      }, 400)
     }
   }
   if (obj == player && gameOver) {
