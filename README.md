@@ -1,9 +1,9 @@
 Death by Time Manipulation
 ==========================
 
-By the time your ship touches a time killer, you will have seen the entire lifetime of the universe pass. At which point it's game over. Made at [CodeDay LA](https://codeday.org/la).
+To play, [click here](https://ad510.github.io/time-dilation-game) or open index.htm.
 
-Open index.htm or [go here](https://ad510.github.io/time-dilation-game) to play.
+If you approach a time killer, you will time travel into the future. But if you ever get close enough to touch one, then by that time you will have time travelled to the end of the universe. When that happens, it's game over. Originally made at [CodeDay LA](https://codeday.org/la) in February 2016, but I've improved the game since then.
 
 How it works
 ------------
