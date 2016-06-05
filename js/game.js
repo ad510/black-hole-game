@@ -49,7 +49,7 @@ function load(color) {
 }
 
 function update() {
-  // procedurally generate fields and asteroids
+  // create fields and asteroids
   while (fields.length < NFields + NFields * time / 120000) {
     var p = randInCircle(1000, 2000)
     var v = randInCircle(0, FieldSpd + FieldSpd * time / 120000)
@@ -57,8 +57,7 @@ function update() {
       var field = objNew("img/hole.png", player.x + p.x, player.y + p.y, player.dilatedVelX + v.x, player.dilatedVelY + v.y, 0)
       field.div.style.zIndex = -1
       fields[fields.length] = field
-    }
-    else {
+    } else {
       var shot = objNew("img/asteroid.png", player.x + p.x, player.y + p.y, player.dilatedVelX + v.x, player.dilatedVelY + v.y, Math.random() * Math.PI * 2)
       shot.velRot = (Math.random() - 0.5) * PlayerRotSpd * 4
       shots[shots.length] = shot
@@ -80,7 +79,12 @@ function updateObjs() {
   }
   for (var i = 0; i < fields.length; i++) updatePos(fields[i], 0, 0)
   for (var i = 0; i < shots.length; i++) updatePos(shots[i], 0, shots[i].velRot)
-  updatePos(player, (keys[38] - keys[40]) * PlayerAcc, (keys[37] - keys[39]) * PlayerRotSpd)
+  if (gameOver) {
+    player.x = gameOver.field.x + gameOver.x
+    player.y = gameOver.field.y + gameOver.y
+  } else {
+    updatePos(player, (keys[38] - keys[40]) * PlayerAcc, (keys[37] - keys[39]) * PlayerRotSpd)
+  }
   // draw objects
   viewX = player.x - getWindowWidth() / 2
   viewY = player.y - getWindowHeight() / 2
@@ -123,34 +127,29 @@ function updatePos(obj, fwd, rot) {
     }
   }
   // update position and rotation
-  if (obj == player && gameOver) {
-    obj.x = gameOver.field.x + gameOver.x
-    obj.y = gameOver.field.y + gameOver.y
+  if (field) {
+    obj.dilatedVelX = field.dilatedVelX + (obj.velX - field.dilatedVelX) * mul
+    obj.dilatedVelY = field.dilatedVelY + (obj.velY - field.dilatedVelY) * mul
   } else {
-    if (field) {
-      obj.dilatedVelX = field.dilatedVelX + (obj.velX - field.dilatedVelX) * mul
-      obj.dilatedVelY = field.dilatedVelY + (obj.velY - field.dilatedVelY) * mul
-    } else {
-      obj.dilatedVelX = obj.velX
-      obj.dilatedVelY = obj.velY
-    }
-    obj.x += obj.dilatedVelX / timeScale
-    obj.y += obj.dilatedVelY / timeScale
-    obj.rot += rot * mul / timeScale
+    obj.dilatedVelX = obj.velX
+    obj.dilatedVelY = obj.velY
   }
+  obj.x += obj.dilatedVelX / timeScale
+  obj.y += obj.dilatedVelY / timeScale
+  obj.rot += rot * mul / timeScale
   if (obj == player && !gameOver) {
     if (mul >= UpdateRate / 1500) timeScale = mul // update time travel factor
     else {
       // player reached a singularity
-      timeScale = UpdateRate / 1500
       gameOver = {
         field: field,
-        x: obj.x - field.x,
-        y: obj.y - field.y,
+        x: player.x - field.x,
+        y: player.y - field.y,
       }
       document.getElementById("score").firstChild.nodeValue = Math.floor(time / 1000)
       // can't simulate an infinite time interval in one update
       // so instead, exponentially increase time travel speed for about 100 ms
+      timeScale = UpdateRate / 1500
       clearInterval(timer)
       timer = setInterval(function() {
         updateObjs()
