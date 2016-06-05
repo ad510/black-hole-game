@@ -1,91 +1,78 @@
 "use strict";
 
-// returns new object with specified properties
-function objNew(imgPath, x, y, velX, velY, rot) {
-  var ret = {
-    x: x,
-    y: y,
-    velX: velX,
-    velY: velY,
-    dilatedVelX: velX,
-    dilatedVelY: velY,
-    rot: rot,
-    div: document.createElement("div"),
-  };
-  ret.div.style.position = "fixed";
-  ret.div.style.display = "none";
-  objSetImage(ret, imgPath);
-  getDrawDiv().appendChild(ret.div);
-  return ret;
+// game object class
+function Obj(imgPath, x, y, velX, velY, rot) {
+  this.x = x;
+  this.y = y;
+  this.velX = velX;
+  this.velY = velY;
+  this.dilatedVelX = velX;
+  this.dilatedVelY = velY;
+  this.rot = rot;
+  this.div = document.createElement("div"); // use div instead of img so image is not selectable
+  this.div.style.position = "fixed";
+  this.div.style.display = "none";
+  this.setImage(imgPath);
+  getDrawDiv().appendChild(this.div);
 }
 
-// set background image of object's div tag
-// use div tag instead of img tag so image is not selectable
-// side effect is can no longer set alt attribute, but Ami recommends doing this anyway
-function objSetImage(obj, imgPath) {
-  if (imgPath != obj.imgPath) {
-    obj.imgPath = imgPath;
-    obj.div.style.backgroundImage = "url('" + imgPath + "')";
-    obj.div.style.width = imgProp[imgPath].width + "px";
-    obj.div.style.height = imgProp[imgPath].height + "px";
+Obj.prototype.setImage = function(imgPath) {
+  if (imgPath != this.imgPath) {
+    this.imgPath = imgPath;
+    this.div.style.backgroundImage = "url('" + imgPath + "')";
+    this.div.style.width = imgProp[imgPath].width + "px";
+    this.div.style.height = imgProp[imgPath].height + "px";
   }
 }
 
-// draw specified object
-function objDraw(obj) {
-  if (obj.x - imgProp[obj.imgPath].baseX + imgProp[obj.imgPath].width > viewX && obj.x - imgProp[obj.imgPath].baseX < viewX + getWindowWidth()
-      && obj.y - imgProp[obj.imgPath].baseY + imgProp[obj.imgPath].height > viewY && obj.y - imgProp[obj.imgPath].baseY < viewY + getWindowHeight()) {
-    obj.div.style.left = (obj.x - imgProp[obj.imgPath].baseX - viewX) + "px";
-    obj.div.style.top = (obj.y - imgProp[obj.imgPath].baseY - viewY) + "px";
-    obj.div.style.transform = "rotate(" + (Math.PI / 2 - obj.rot) + "rad)";
-    //obj.div.style.zIndex = Math.floor(obj.y);
-    obj.div.style.display = "";
+Obj.prototype.draw = function() {
+  if (this.x - imgProp[this.imgPath].baseX + imgProp[this.imgPath].width > viewX && this.x - imgProp[this.imgPath].baseX < viewX + getWindowWidth()
+      && this.y - imgProp[this.imgPath].baseY + imgProp[this.imgPath].height > viewY && this.y - imgProp[this.imgPath].baseY < viewY + getWindowHeight()) {
+    this.div.style.left = (this.x - imgProp[this.imgPath].baseX - viewX) + "px";
+    this.div.style.top = (this.y - imgProp[this.imgPath].baseY - viewY) + "px";
+    this.div.style.transform = "rotate(" + (Math.PI / 2 - this.rot) + "rad)";
+    //this.div.style.zIndex = Math.floor(this.y);
+    this.div.style.display = "";
   }
   else {
-    obj.div.style.display = "none";
+    this.div.style.display = "none";
   }
 }
 
-// stop drawing specified object
-function objRemove(obj) {
-  getDrawDiv().removeChild(obj.div);
+Obj.prototype.remove = function() {
+  getDrawDiv().removeChild(this.div);
 }
 
-// returns distance between 2 objects
 function objDist(obj1, obj2) {
   return Math.sqrt(objDistSq(obj1, obj2));
 }
 
-// returns square of distance between 2 objects
 function objDistSq(obj1, obj2) {
   return (obj2.x - obj1.x) * (obj2.x - obj1.x) + (obj2.y - obj1.y) * (obj2.y - obj1.y);
 }
 
-// returns object to play either specified ogg or mp3 sound (depending on browser support)
+// sound class (loads ogg or mp3 file depending on browser support)
 // html5 audio described at http://html5doctor.com/html5-audio-the-state-of-play
-function sndNew(path, nCopies) {
-  var ret = {};
-  ret.next = 0;
-  ret.snds = [];
+function Sound(path, nCopies) {
+  this.next = 0;
+  this.snds = [];
   if (window.Audio) {
     for (var i = 0; i < nCopies; i++) {
-      ret.snds[i] = new Audio();
-      if (ret.snds[i].canPlayType && ret.snds[i].canPlayType("audio/ogg") != "") {
-        ret.snds[i].src = path + ".ogg";
+      this.snds[i] = new Audio();
+      if (this.snds[i].canPlayType && this.snds[i].canPlayType("audio/ogg") != "") {
+        this.snds[i].src = path + ".ogg";
       }
-      else if (ret.snds[i].canPlayType && ret.snds[i].canPlayType("audio/mpeg") != "") {
-        ret.snds[i].src = path + ".mp3";
+      else if (this.snds[i].canPlayType && this.snds[i].canPlayType("audio/mpeg") != "") {
+        this.snds[i].src = path + ".mp3";
       }
     }
   }
-  return ret;
 }
 
-// play specified sound array object
-function sndPlay(snd) {
-  if (snd.snds[snd.next] && snd.snds[snd.next].currentSrc) {
-    snd.snds[snd.next].play();
-    snd.next = (snd.next + 1) % snd.snds.length;
+Sound.prototype.play = function() {
+  if (this.snds[this.next] && this.snds[this.next].currentSrc) {
+    this.snds[this.next].play();
+    this.next = (this.next + 1) % this.snds.length;
   }
 }
 
@@ -104,7 +91,6 @@ function arrayRemove(array, index) {
   array.splice(array.length - 1, 1);
 }
 
-// returns div tag that objects are drawn in
 function getDrawDiv() {
   return document.getElementById("draw");
 }

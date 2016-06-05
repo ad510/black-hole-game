@@ -26,19 +26,19 @@ function load(color) {
   document.getElementById("intro").style.display = "none"
   document.getElementById("instruct").style.display = ""
   document.body.style.backgroundColor = color
-  rocketSnd = sndNew("snd/rocket", 1)
-  stopSnd = sndNew("snd/stop", 1)
-  player = objNew("img/obj0.png", 0, 0, 0, 0, Math.PI / 2)
+  rocketSnd = new Sound("snd/rocket", 1)
+  stopSnd = new Sound("snd/stop", 1)
+  player = new Obj("img/obj0.png", 0, 0, 0, 0, Math.PI / 2)
   for (var i = 0; i < (NFields / FieldRatio - NFields) / 4; i++) {
     var p = randInCircle(0, 1000)
     var v = randInCircle(0, FieldSpd)
-    shots[i] = objNew("img/asteroid.png", p.x, p.y, v.x, v.y, Math.random() * Math.PI * 2)
+    shots[i] = new Obj("img/asteroid.png", p.x, p.y, v.x, v.y, Math.random() * Math.PI * 2)
     shots[i].velRot = (Math.random() - 0.5) * PlayerRotSpd * 4
   }
   for (var i = 0; i < NFields / 4; i++) {
     var p = randInCircle(500, 1000)
     var v = randInCircle(0, FieldSpd)
-    fields[i] = objNew("img/hole.png", p.x, p.y, v.x, v.y, 0)
+    fields[i] = new Obj("img/hole.png", p.x, p.y, v.x, v.y, 0)
     fields[i].div.style.zIndex = -1
   }
   update()
@@ -54,11 +54,11 @@ function update() {
     var p = randInCircle(1000, 2000)
     var v = randInCircle(0, FieldSpd + FieldSpd * time / 120000)
     if (Math.random() < FieldRatio) {
-      var field = objNew("img/hole.png", player.x + p.x, player.y + p.y, player.dilatedVelX + v.x, player.dilatedVelY + v.y, 0)
+      var field = new Obj("img/hole.png", player.x + p.x, player.y + p.y, player.dilatedVelX + v.x, player.dilatedVelY + v.y, 0)
       field.div.style.zIndex = -1
       fields[fields.length] = field
     } else {
-      var shot = objNew("img/asteroid.png", player.x + p.x, player.y + p.y, player.dilatedVelX + v.x, player.dilatedVelY + v.y, Math.random() * Math.PI * 2)
+      var shot = new Obj("img/asteroid.png", player.x + p.x, player.y + p.y, player.dilatedVelX + v.x, player.dilatedVelY + v.y, Math.random() * Math.PI * 2)
       shot.velRot = (Math.random() - 0.5) * PlayerRotSpd * 4
       shots[shots.length] = shot
     }
@@ -88,19 +88,19 @@ function updateObjs() {
   // draw objects
   viewX = player.x - getWindowWidth() / 2
   viewY = player.y - getWindowHeight() / 2
-  objDraw(player)
+  player.draw()
   for (var i = 0; i < shots.length; i++) {
-    objDraw(shots[i])
+    shots[i].draw()
     if (objDistSq(shots[i], player) > Radius * Radius) {
-      objRemove(shots[i])
+      shots[i].remove()
       arrayRemove(shots, i)
       i--
     }
   }
   for (var i = 0; i < fields.length; i++) {
-    objDraw(fields[i])
+    fields[i].draw()
     if (objDistSq(fields[i], player) > Radius * Radius) {
-      objRemove(fields[i])
+      fields[i].remove()
       arrayRemove(fields, i)
       i--
     }
@@ -169,9 +169,9 @@ function updatePos(obj, fwd, rot) {
 }
 
 function propel(dir) {
-  var shot = objNew("img/propel.png", player.x, player.y,
-                    player.velX + PropelSpd * Math.cos(player.rot) * dir + (Math.random() - 0.5) * PropelSpd / 3,
-                    player.velY - PropelSpd * Math.sin(player.rot) * dir + (Math.random() - 0.5) * PropelSpd / 3, 0)
+  var shot = new Obj("img/propel.png", player.x, player.y,
+                     player.velX + PropelSpd * Math.cos(player.rot) * dir + (Math.random() - 0.5) * PropelSpd / 3,
+                     player.velY - PropelSpd * Math.sin(player.rot) * dir + (Math.random() - 0.5) * PropelSpd / 3, 0)
   shot.velRot = 0
   shots[shots.length] = shot
 }
@@ -190,14 +190,14 @@ function keyDown(event) {
   var key = findKey(event)
   //document.title = key
   keys[key] = 1
-  if (player && !gameOver && (keys[38] || keys[40])) sndPlay(rocketSnd)
+  if (player && !gameOver && (keys[38] || keys[40])) rocketSnd.play()
 }
 
 function keyUp(event) {
   var key = findKey(event)
   keys[key] = 0
   if (player && !gameOver && (key == 38 || key == 40) && !(keys[38] || keys[40])) {
-    sndPlay(stopSnd)
+    stopSnd.play()
     rocketSnd.snds[0].pause()
     rocketSnd.snds[0].currentTime = 0
   }
