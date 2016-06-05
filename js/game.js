@@ -122,6 +122,22 @@ function updatePos(obj, fwd, rot) {
       }
     }
   }
+  // update position and rotation
+  if (obj == player && gameOver) {
+    obj.x = gameOver.field.x + gameOver.x
+    obj.y = gameOver.field.y + gameOver.y
+  } else {
+    if (field) {
+      obj.dilatedVelX = field.dilatedVelX + (obj.velX - field.dilatedVelX) * mul
+      obj.dilatedVelY = field.dilatedVelY + (obj.velY - field.dilatedVelY) * mul
+    } else {
+      obj.dilatedVelX = obj.velX
+      obj.dilatedVelY = obj.velY
+    }
+    obj.x += obj.dilatedVelX / timeScale
+    obj.y += obj.dilatedVelY / timeScale
+    obj.rot += rot * mul / timeScale
+  }
   if (obj == player && !gameOver) {
     if (mul >= UpdateRate / 1500) timeScale = mul // update time travel factor
     else {
@@ -129,8 +145,8 @@ function updatePos(obj, fwd, rot) {
       timeScale = UpdateRate / 1500
       gameOver = {
         field: field,
-        x: obj.x - field.prevX,
-        y: obj.y - field.prevY,
+        x: obj.x - field.x,
+        y: obj.y - field.y,
       }
       document.getElementById("score").firstChild.nodeValue = Math.floor(time / 1000)
       // can't simulate an infinite time interval in one update
@@ -150,22 +166,6 @@ function updatePos(obj, fwd, rot) {
       }, 10)
     }
   }
-  // update position and rotation
-  if (obj == player && gameOver) {
-    obj.x = gameOver.field.x + gameOver.x
-    obj.y = gameOver.field.y + gameOver.y
-    return
-  }
-  if (field) {
-    obj.dilatedVelX = field.dilatedVelX + (obj.velX - field.dilatedVelX) * mul
-    obj.dilatedVelY = field.dilatedVelY + (obj.velY - field.dilatedVelY) * mul
-  } else {
-    obj.dilatedVelX = obj.velX
-    obj.dilatedVelY = obj.velY
-  }
-  obj.x += obj.dilatedVelX / timeScale
-  obj.y += obj.dilatedVelY / timeScale
-  obj.rot += rot * mul / timeScale
 }
 
 function propel(dir) {
