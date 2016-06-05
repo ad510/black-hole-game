@@ -18,7 +18,7 @@ var timer
 var player, timeScale = 1
 var shots = []
 var fields = []
-var gameOver = false
+var endField, endX, endY
 
 var rocketSnd, stopSnd
 
@@ -79,9 +79,9 @@ function updateObjs() {
   }
   for (var i = 0; i < fields.length; i++) updatePos(fields[i], 0, 0)
   for (var i = 0; i < shots.length; i++) updatePos(shots[i], 0, shots[i].velRot)
-  if (gameOver) {
-    player.x = gameOver.field.x + gameOver.x
-    player.y = gameOver.field.y + gameOver.y
+  if (endField) {
+    player.x = endField.x + endX
+    player.y = endField.y + endY
   } else {
     updatePos(player, (keys[38] - keys[40]) * PlayerAcc, (keys[37] - keys[39]) * PlayerRotSpd)
   }
@@ -137,15 +137,13 @@ function updatePos(obj, fwd, rot) {
   obj.x += obj.dilatedVelX / timeScale
   obj.y += obj.dilatedVelY / timeScale
   obj.rot += rot * mul / timeScale
-  if (obj == player && !gameOver) {
+  if (obj == player && !endField) {
     if (mul >= UpdateRate / 1500) timeScale = mul // update time travel factor
     else {
       // player reached a singularity
-      gameOver = {
-        field: field,
-        x: player.x - field.x,
-        y: player.y - field.y,
-      }
+      endField = field
+      endX = player.x - field.x
+      endY = player.y - field.y
       document.getElementById("score").firstChild.nodeValue = Math.floor(time / 1000)
       // can't simulate an infinite time interval in one update
       // so instead, exponentially increase time travel speed for about 100 ms
@@ -190,13 +188,13 @@ function keyDown(event) {
   var key = findKey(event)
   //document.title = key
   keys[key] = 1
-  if (player && !gameOver && (keys[38] || keys[40])) rocketSnd.play()
+  if (player && !endField && (keys[38] || keys[40])) rocketSnd.play()
 }
 
 function keyUp(event) {
   var key = findKey(event)
   keys[key] = 0
-  if (player && !gameOver && (key == 38 || key == 40) && !(keys[38] || keys[40])) {
+  if (player && !endField && (key == 38 || key == 40) && !(keys[38] || keys[40])) {
     stopSnd.play()
     rocketSnd.snds[0].pause()
     rocketSnd.snds[0].currentTime = 0
