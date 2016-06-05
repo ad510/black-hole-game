@@ -49,6 +49,7 @@ function load(color) {
 }
 
 function update() {
+  // procedurally generate time killers and asteroids
   while (fields.length < NFields + NFields * time / 120000) {
     var p = randInCircle(1000, 2000)
     var v = randInCircle(0, FieldSpd + FieldSpd * time / 120000)
@@ -63,13 +64,16 @@ function update() {
       shots[shots.length] = shot
     }
   }
+  // rotate player using mouse or touch
   if (isMouseDown) player.rot = Math.atan2(-mouseY + getWindowHeight() / 2, mouseX - getWindowWidth() / 2)
+  // create rocket exhaust
   if (keys[38] && Math.random() < 0.02 * UpdateRate) propel(-1)
   if (keys[40] && Math.random() < 0.02 * UpdateRate) propel(1)
   updateObjs()
 }
 
 function updateObjs() {
+  // move objects
   for (var i = 0; i < fields.length; i++) {
     fields[i].prevX = fields[i].x
     fields[i].prevY = fields[i].y
@@ -77,6 +81,7 @@ function updateObjs() {
   for (var i = 0; i < fields.length; i++) updatePos(fields[i], 0, 0)
   for (var i = 0; i < shots.length; i++) updatePos(shots[i], 0, shots[i].velRot)
   updatePos(player, (keys[38] - keys[40]) * PlayerAcc, (keys[37] - keys[39]) * PlayerRotSpd)
+  // draw objects
   viewX = player.x - getWindowWidth() / 2
   viewY = player.y - getWindowHeight() / 2
   objDraw(player)
@@ -96,44 +101,20 @@ function updateObjs() {
       i--
     }
   }
+  // increment time
   time += UpdateRate
-}
-
-function keyDown(event) {
-  var key = findKey(event)
-  //document.title = key
-  keys[key] = 1
-  if (player && !gameOver && (keys[38] || keys[40])) sndPlay(rocketSnd)
-}
-
-function keyUp(event) {
-  var key = findKey(event)
-  keys[key] = 0
-  if (player && !gameOver && (key == 38 || key == 40) && !(keys[38] || keys[40])) {
-    sndPlay(stopSnd)
-    rocketSnd.snds[0].pause()
-    rocketSnd.snds[0].currentTime = 0
-  }
-}
-
-function mouseDown() {
-  keyDown({keyCode: 38})
-  isMouseDown = true
-}
-
-function mouseUp() {
-  keyUp({keyCode: 38})
-  isMouseDown = false
 }
 
 function updatePos(obj, fwd, rot) {
   var field, dist, mul = 1
+  // update velocity
   obj.velX += fwd * Math.cos(obj.rot)
   obj.velY += -fwd * Math.sin(obj.rot)
+  // find closest time killer
   for (var i = 0; i < fields.length; i++) {
     if (fields[i] != obj) {
       var d = objDist(obj, {x: fields[i].prevX, y: fields[i].prevY})
-      var m = Math.max(0, Math.min(1, d / 500 - 0.2)) // possible to compute this after loop, or use a weighted average instead (sum up all delta v's won't work b/c 2 close black holes would repel player)
+      var m = Math.max(0, Math.min(1, d / 500 - 0.2)) // possible to compute this after loop, or use a weighted average instead (sum up all delta v's won't work b/c 2 close time killers would repel player)
       if (m < 1 && (!field || d < dist)) {
         field = fields[i]
         dist = d
@@ -142,8 +123,9 @@ function updatePos(obj, fwd, rot) {
     }
   }
   if (obj == player && !gameOver) {
-    if (mul >= UpdateRate / 1500) timeScale = mul
+    if (mul >= UpdateRate / 1500) timeScale = mul // update time travel factor
     else {
+      // player is touching a time killer
       timeScale = UpdateRate / 1500
       gameOver = {
         field: field,
@@ -151,11 +133,14 @@ function updatePos(obj, fwd, rot) {
         y: obj.y - field.prevY,
       }
       document.getElementById("score").firstChild.nodeValue = Math.floor(time / 1000)
+      // can't simulate an infinite time interval in one update
+      // so instead, exponentially increase time travel speed for about 100 ms
       clearInterval(timer)
       timer = setInterval(function() {
         updateObjs()
         timeScale /= 2
         if (timeScale < 0.00005) {
+          // game over
           document.body.style.backgroundColor = "gray"
           document.getElementById("instruct").style.display = "none"
           document.getElementById("gameover").style.display = ""
@@ -165,6 +150,7 @@ function updatePos(obj, fwd, rot) {
       }, 10)
     }
   }
+  // update position and rotation
   if (obj == player && gameOver) {
     obj.x = gameOver.field.x + gameOver.x
     obj.y = gameOver.field.y + gameOver.y
@@ -198,4 +184,31 @@ function randInCircle(min, max) {
     d = x*x + y*y
   } while (d < min * min || d > max * max)
   return {x: x, y: y}
+}
+
+function keyDown(event) {
+  var key = findKey(event)
+  //document.title = key
+  keys[key] = 1
+  if (player && !gameOver && (keys[38] || keys[40])) sndPlay(rocketSnd)
+}
+
+function keyUp(event) {
+  var key = findKey(event)
+  keys[key] = 0
+  if (player && !gameOver && (key == 38 || key == 40) && !(keys[38] || keys[40])) {
+    sndPlay(stopSnd)
+    rocketSnd.snds[0].pause()
+    rocketSnd.snds[0].currentTime = 0
+  }
+}
+
+function mouseDown() {
+  keyDown({keyCode: 38})
+  isMouseDown = true
+}
+
+function mouseUp() {
+  keyUp({keyCode: 38})
+  isMouseDown = false
 }
