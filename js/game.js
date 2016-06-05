@@ -157,9 +157,9 @@ function updatePos(obj, fwd, rot) {
         if (timeScale < 0.00005) {
           // game over
           document.body.style.backgroundColor = "gray"
+          document.getElementById("back").style.display = "" // workaround for safari
           document.getElementById("instruct").style.display = "none"
           document.getElementById("gameover").style.display = ""
-          getDrawDiv().style.transform = "translateZ(0)" // hack to force redraw on safari
           clearInterval(timer)
           rocketSnd.snds[0].pause()
         }

@@ -13,7 +13,7 @@ function Obj(imgPath, x, y, velX, velY, rot) {
   this.div.style.position = "fixed";
   this.div.style.display = "none";
   this.setImage(imgPath);
-  getDrawDiv().appendChild(this.div);
+  document.body.appendChild(this.div);
 }
 
 Obj.prototype.setImage = function(imgPath) {
@@ -40,7 +40,7 @@ Obj.prototype.draw = function() {
 }
 
 Obj.prototype.remove = function() {
-  getDrawDiv().removeChild(this.div);
+  document.body.removeChild(this.div);
 }
 
 function objDist(obj1, obj2) {
@@ -74,8 +74,4 @@ Sound.prototype.play = function() {
     this.snds[this.next].play();
     this.next = (this.next + 1) % this.snds.length;
   }
-}
-
-function getDrawDiv() {
-  return document.getElementById("draw");
 }
