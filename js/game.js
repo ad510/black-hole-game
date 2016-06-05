@@ -154,8 +154,8 @@ function updatePos(obj, fwd, rot) {
       clearInterval(timer)
       timer = setInterval(function() {
         updateObjs()
-        timeScale *= 0.75
-        if (timeScale < 0.0005) {
+        timeScale /= 2
+        if (timeScale < 0.00005) {
           document.body.style.backgroundColor = "gray"
           document.getElementById("instruct").style.display = "none"
           document.getElementById("gameover").style.display = ""
