@@ -74,25 +74,25 @@ function updateObjs() {
     fields[i].prevX = fields[i].x
     fields[i].prevY = fields[i].y
   }
+  for (var i = 0; i < fields.length; i++) updatePos(fields[i], 0, 0)
+  for (var i = 0; i < shots.length; i++) updatePos(shots[i], 0, shots[i].velRot)
   updatePos(player, (keys[38] - keys[40]) * PlayerAcc, (keys[37] - keys[39]) * PlayerRotSpd)
   viewX = player.x - getWindowWidth() / 2
   viewY = player.y - getWindowHeight() / 2
   objDraw(player)
-  for (var i = 0; i < fields.length; i++) {
-    updatePos(fields[i], 0, 0)
-    objDraw(fields[i])
-    if (objDistSq(fields[i], player) > Radius * Radius) {
-      objRemove(fields[i])
-      arrayRemove(fields, i)
-      i--
-    }
-  }
   for (var i = 0; i < shots.length; i++) {
-    updatePos(shots[i], 0, shots[i].velRot)
     objDraw(shots[i])
     if (objDistSq(shots[i], player) > Radius * Radius) {
       objRemove(shots[i])
       arrayRemove(shots, i)
+      i--
+    }
+  }
+  for (var i = 0; i < fields.length; i++) {
+    objDraw(fields[i])
+    if (objDistSq(fields[i], player) > Radius * Radius) {
+      objRemove(fields[i])
+      arrayRemove(fields, i)
       i--
     }
   }
@@ -166,8 +166,8 @@ function updatePos(obj, fwd, rot) {
     }
   }
   if (obj == player && gameOver) {
-    obj.x = gameOver.field.x + gameOver.field.dilatedVelX / timeScale + gameOver.x
-    obj.y = gameOver.field.y + gameOver.field.dilatedVelY / timeScale + gameOver.y
+    obj.x = gameOver.field.x + gameOver.x
+    obj.y = gameOver.field.y + gameOver.y
     return
   }
   if (field) {
