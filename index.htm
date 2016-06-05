@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Death by Time Manipulation</title>
+    <title>Death by Time Travel</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <style type="text/css">
 body {
@@ -38,18 +38,18 @@ div.texty {
         ontouchstart="getMousePos(event.changedTouches[0]); mouseDown()" ontouchend="mouseUp()" ontouchmove="getMousePos(event.changedTouches[0]); if (player) event.preventDefault()">
     <div id="draw" style="position: absolute; width: 100%; height: 100%"></div>
     <div id="intro" class="texty">
-      Death by Time Manipulation
+      Death by Time Travel
       <div style="font-size: 25px"><br/>
-        If you approach a time killer, you will time travel into the future.<br/><br/>
-        But if you ever get close enough to touch one, then by that time you will have time travelled to the end of the universe.<br/><br/>
-        When that happens, it's <a href="https://github.com/ad510/time-dilation-game/blob/gh-pages/README.md#how-it-works" target="_blank" style="color: white">game over</a>.<br/><br/><br/>
+        If you approach a time field, you will time travel into the future.<br/>
+        But if you get too close, it will take you to the end of the universe.<br/>
+        When that happens, it's <a href="https://github.com/ad510/time-dilation-game/blob/gh-pages/README.md#how-it-works" target="_blank" style="color: white">game over</a>.<br/><br/>
         <input type="button" value="Easy" onclick="load('gray')"/><br/>
-        Time killers are visible. Asteroids have no effect on gameplay.<br/><br/>
+        Time fields are visible. Asteroids have no effect on gameplay.<br/><br/>
         <input type="button" value="Hard" onclick="load('black')"/><br/>
-        Time killers are invisible on a black background, so you must find them by studying their time manipulation effects on asteroids and rocket exhaust.
+        Time fields are invisible on a black background, so you must find them by studying their time manipulation effects on asteroids and rocket exhaust.
       </div>
     </div>
-    <div id="instruct" class="texty" style="display: none">Use arrow keys to move. Avoid the time killers!</div>
+    <div id="instruct" class="texty" style="display: none">Use arrow keys to move. Avoid the time fields!</div>
     <div id="gameover" class="texty" style="display: none">
       GAME OVER<br/>
       You reached the end of the universe in <span id="score">&nbsp;</span> seconds<br/>

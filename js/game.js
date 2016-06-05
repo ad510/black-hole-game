@@ -49,7 +49,7 @@ function load(color) {
 }
 
 function update() {
-  // procedurally generate time killers and asteroids
+  // procedurally generate fields and asteroids
   while (fields.length < NFields + NFields * time / 120000) {
     var p = randInCircle(1000, 2000)
     var v = randInCircle(0, FieldSpd + FieldSpd * time / 120000)
@@ -110,11 +110,11 @@ function updatePos(obj, fwd, rot) {
   // update velocity
   obj.velX += fwd * Math.cos(obj.rot)
   obj.velY += -fwd * Math.sin(obj.rot)
-  // find closest time killer
+  // find closest field
   for (var i = 0; i < fields.length; i++) {
     if (fields[i] != obj) {
       var d = objDist(obj, {x: fields[i].prevX, y: fields[i].prevY})
-      var m = Math.max(0, Math.min(1, d / 500 - 0.2)) // possible to compute this after loop, or use a weighted average instead (sum up all delta v's won't work b/c 2 close time killers would repel player)
+      var m = Math.max(0, Math.min(1, d / 500 - 0.2)) // possible to compute this after loop, or use a weighted average instead (sum up all delta v's won't work b/c 2 close fields would repel player)
       if (m < 1 && (!field || d < dist)) {
         field = fields[i]
         dist = d
@@ -141,7 +141,7 @@ function updatePos(obj, fwd, rot) {
   if (obj == player && !gameOver) {
     if (mul >= UpdateRate / 1500) timeScale = mul // update time travel factor
     else {
-      // player is touching a time killer
+      // player reached a singularity
       timeScale = UpdateRate / 1500
       gameOver = {
         field: field,
