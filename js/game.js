@@ -10,7 +10,7 @@ var NFields = 20
 var FieldRatio = 0.1
 
 var keys = [].fill.call({length: 255}, 0)
-var mouseX = 0, mouseY = 0, isMouseDown = false
+var isMouseDown = false
 var viewX = 0, viewY = 0
 var time = 0
 var timer
