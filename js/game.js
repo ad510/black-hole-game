@@ -142,7 +142,7 @@ function updatePos(obj, fwd, rot) {
     if (mul >= UpdateRate / 1500) timeScale = mul // update time travel factor
     else {
       // player reached a singularity
-      timeScale = UpdateRate / 1500
+      timeScale = 1
       gameOver = {
         field: field,
         x: obj.x - field.x,
@@ -152,9 +152,11 @@ function updatePos(obj, fwd, rot) {
       // can't simulate an infinite time interval in one update
       // so instead, exponentially increase time travel speed for about 100 ms
       clearInterval(timer)
+      rocketSnd.snds[0].pause()
       timer = setInterval(function() {
-        updateObjs()
-        timeScale /= 2
+        update()
+        timeScale /= 1.01
+        document.title = Math.floor(1 / timeScale) + "x speed"
         if (timeScale < 0.00005) {
           // game over
           document.body.style.backgroundColor = "gray"
@@ -162,7 +164,6 @@ function updatePos(obj, fwd, rot) {
           document.getElementById("gameover").style.display = ""
           getDrawDiv().style.transform = "translateZ(0)" // hack to force redraw on safari
           clearInterval(timer)
-          rocketSnd.snds[0].pause()
         }
       }, 10)
     }
