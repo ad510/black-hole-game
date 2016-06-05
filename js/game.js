@@ -10,7 +10,7 @@ var NFields = 20
 var FieldRatio = 0.1
 
 var keys = [].fill.call({length: 255}, 0)
-var isMouseDown = false
+var mouseDown = false
 var viewX = 0, viewY = 0
 var time = 0
 var timer
@@ -64,7 +64,7 @@ function update() {
     }
   }
   // rotate player using mouse or touch
-  if (isMouseDown) player.rot = Math.atan2(-mouseY + getWindowHeight() / 2, mouseX - getWindowWidth() / 2)
+  if (mouseDown) player.rot = Math.atan2(-mouseY + getWindowHeight() / 2, mouseX - getWindowWidth() / 2)
   // create rocket exhaust
   if (keys[38] && Math.random() < 0.02 * UpdateRate) propel(-1)
   if (keys[40] && Math.random() < 0.02 * UpdateRate) propel(1)
@@ -184,15 +184,15 @@ function randInCircle(min, max) {
   return {x: x, y: y}
 }
 
-function keyDown(event) {
-  var key = findKey(event)
+window.onkeydown = function(e) {
+  var key = findKey(e)
   //document.title = key
   keys[key] = 1
   if (player && !endField && (keys[38] || keys[40])) rocketSnd.play()
 }
 
-function keyUp(event) {
-  var key = findKey(event)
+window.onkeyup = function(e) {
+  var key = findKey(e)
   keys[key] = 0
   if (player && !endField && (key == 38 || key == 40) && !(keys[38] || keys[40])) {
     stopSnd.play()
@@ -201,12 +201,26 @@ function keyUp(event) {
   }
 }
 
-function mouseDown() {
-  keyDown({keyCode: 38})
-  isMouseDown = true
+window.onmousedown = function() {
+  window.onkeydown({keyCode: 38})
+  mouseDown = true
 }
 
-function mouseUp() {
-  keyUp({keyCode: 38})
-  isMouseDown = false
+window.onmouseup = function() {
+  window.onkeyup({keyCode: 38})
+  mouseDown = false
+}
+
+window.onmousemove = getMousePos
+
+window.ontouchstart = function(e) {
+  getMousePos(e.changedTouches[0])
+  window.onmousedown()
+}
+
+window.ontouchend = window.onmouseup
+
+window.ontouchmove = function(e) {
+  getMousePos(e.changedTouches[0])
+  if (player) e.preventDefault()
 }
