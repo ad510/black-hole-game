@@ -13,6 +13,9 @@ body {
   font-family: "Arial", "serif";
   font-size: 50px;
 }
+a {
+  color: white;
+}
 input {
   -webkit-appearance: button;
   font-size: 25px;
@@ -41,12 +44,13 @@ div.texty {
       Death by Time Travel
       <div style="font-size: 25px"><br/>
         If you approach a time field, you will time travel into the future.<br/>
-        But if you get too close, it will take you to the <a href="https://github.com/ad510/time-dilation-game/blob/gh-pages/README.md#how-it-works" target="_blank" style="color: white">end of the universe</a>.<br/>
+        But if you get too close, it will take you to the end of the universe.<br/>
         When that happens, it's game over.<br/><br/>
         <input type="button" value="Easy" onclick="load('gray')"/><br/>
         Time fields are visible. Asteroids have no effect on gameplay.<br/><br/>
         <input type="button" value="Hard" onclick="load('black')"/><br/>
-        Time fields are invisible on a black background, so you must find them by studying their time manipulation effects on asteroids and rocket exhaust.
+        Time fields are invisible on a black background, so you must find them by studying their time manipulation effects on asteroids and rocket exhaust.<br/><br/>
+        <a href="https://github.com/ad510/time-dilation-game/blob/gh-pages/README.md#how-it-works" target="_blank">How it works</a> | <a href="https://github.com/ad510/time-dilation-game" target="_blank">GitHub repo</a>
       </div>
     </div>
     <div id="instruct" class="texty" style="display: none">Use arrow keys to move. Avoid the time fields!</div>
