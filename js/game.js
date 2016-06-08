@@ -127,8 +127,8 @@ function updatePos(obj, fwd, rot) {
   }
   // update position and rotation
   if (field) {
-    obj.dilatedVelX = field.dilatedVelX + (obj.velX - field.dilatedVelX) * mul
-    obj.dilatedVelY = field.dilatedVelY + (obj.velY - field.dilatedVelY) * mul
+    obj.dilatedVelX = field.dilatedVelX + (obj.velX - field.dilatedVelX) * mul + (obj.y - field.y) / dist * (1 - mul) * FieldSpd
+    obj.dilatedVelY = field.dilatedVelY + (obj.velY - field.dilatedVelY) * mul - (obj.x - field.x) / dist * (1 - mul) * FieldSpd
   } else {
     obj.dilatedVelX = obj.velX
     obj.dilatedVelY = obj.velY
